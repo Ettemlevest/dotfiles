@@ -21,3 +21,5 @@ alias sail="./vendor/bin/sail"
 # Git
 # TODO: add alias for standard git log
 
+# VSCode
+alias code='open -a "/Applications/Visual Studio Code.app" "`pwd`"'
