@@ -1,0 +1,14 @@
+# Create a new directory and enter it
+function mkd() {
+  mkdir -p "$@" && cd "$@"
+} 
+
+# Laravel Tinker helper
+function tinker() {
+  if [ -z "$1" ]
+    then
+      php artisan tinker
+    else
+      php artisan tinker --execute="dd($1);"
+  fi
+}
