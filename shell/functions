@@ -27,7 +27,7 @@ ip-address() {
 readme() {
     for readme in {readme,README}.{md,MD,markdown,mkd,txt,TXT}; do
         if [[ -x "$(command -v glow)" ]] && [[ -f "$readme" ]]; then
-            glow "$readme"
+            glow -p "$readme"
             break
         elif [[ -f "$readme" ]]; then
             cat "$readme"
