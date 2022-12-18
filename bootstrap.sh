@@ -7,7 +7,7 @@
 # List of packages to install
 packages=(
     # Essentials (cli)
-    dua
+    dua-cli
     fzf
     htop
     lnav
@@ -40,7 +40,7 @@ brew upgrade
 for package in "${packages[@]}"
 do
     log "Installing ${package}"
-    brew install ${package}  
+    brew install ${package} -q
 done
 
 log "Cleaning up"
