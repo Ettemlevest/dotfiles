@@ -10,17 +10,19 @@ packages=(
     tree
     htop
     fzf
+    lnav
+    ripgrep
     # Essentials (gui)
     alt-tab
     keepassxc
     rectangle
-    # Development
+    # For development
     php
     node
     mysql
 )
 
-# some
+# some utilities
 BLUE='\033[0;34m'
 NC='\033[0m'
 
