@@ -7,6 +7,7 @@
 # List of packages to install
 packages=(
     # Essentials (cli)
+    dua
     fzf
     htop
     lnav
