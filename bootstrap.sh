@@ -7,19 +7,19 @@
 # List of packages to install
 packages=(
     # Essentials (cli)
-    tree
-    htop
     fzf
+    htop
     lnav
     ripgrep
+    tree
     # Essentials (gui)
     alt-tab
     keepassxc
     rectangle
     # For development
-    php
-    node
     mysql
+    node
+    php
 )
 
 # some utilities
