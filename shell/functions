@@ -15,7 +15,7 @@ function tinker() {
 
 # Weather
 weather() {
-    curl -s "https://wttr.in/${1:-Budapest}?m2F&format=v2"
+    curl -s "https://wttr.in/${1:-Budapest}?m0F"
 }
 
 # Get information of IP address
