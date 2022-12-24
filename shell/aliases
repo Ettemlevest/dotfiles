@@ -7,7 +7,7 @@ alias localip="ifconfig | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}
 
 # PHP
 alias art="php artisan"
-alias phpunit="vendor/binphpunit"
+alias phpunit="vendor/bin/phpunit"
 alias testdox="vendor/bin/phpunit --testdox -v"
 alias build="bash scripts/build.sh"
 alias ci="composer install"
