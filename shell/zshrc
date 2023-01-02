@@ -64,12 +64,13 @@ export LANG=en_US.UTF-8
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+source $HOME/.dotfiles/shell/aliases
+source $HOME/.dotfiles/shell/functions
+source $HOME/.dotfiles/shell/secrets
+
 alias art="php artisan"
-alias bc="cd ~/Projects/BrokerChooser/brokerchooser.com"
 alias testdox="./vendor/bin/phpunit --testdox -v"
 alias phpunit="./vendor/bin/phpunit"
-alias applydb="bash scripts/apply_database_snapshot.sh"
-alias build="bash scripts/build.sh"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
