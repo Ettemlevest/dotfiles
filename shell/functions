@@ -48,3 +48,10 @@ fshow() {
         --bind="alt-y:execute:$commit_hash | xclip -selection clipboard" \
         --bind="p:toggle-preview"
 }
+
+# fh - repeat history
+h() {
+  print -z $( ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | \
+    fzf +s --tac --reverse | \
+    sed -E 's/ *[0-9]*\*? *//' | sed -E 's/\\/\\\\/g')
+}
