@@ -49,7 +49,7 @@ fshow() {
         --bind="p:toggle-preview"
 }
 
-# fh - repeat history
+# Fuzzy history search
 h() {
   print -z $( ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | \
     fzf +s --tac --reverse | \
