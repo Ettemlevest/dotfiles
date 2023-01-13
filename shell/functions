@@ -43,6 +43,8 @@ fshow() {
         --format="%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset" "$@" | \
     fzf --no-sort --tiebreak=index --no-multi --reverse --ansi \
         --header="enter to view, alt-y to copy hash" --preview="$view_commit" \
+        --preview-label="p to toggle preview window" \
         --bind="enter:execute:$view_commit | less -R" \
-        --bind="alt-y:execute:$commit_hash | xclip -selection clipboard"
+        --bind="alt-y:execute:$commit_hash | xclip -selection clipboard" \
+        --bind="p:toggle-preview"
 }
