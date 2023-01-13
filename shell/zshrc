@@ -30,7 +30,6 @@ export HISTORY_IGNORE="(ls|cd|cd -|pwd|exit|date|* --help)"
 # TODO: clone plugins to oh-myzsh/custom/plugins directory in bootstrap.sh
 plugins=(
   git
-  history
   zsh-autosuggestions
   zsh-syntax-highlighting
   fzf-brew
