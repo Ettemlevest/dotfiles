@@ -42,10 +42,10 @@ fshow() {
     git log --color=always \
         --format="%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset" "$@" | \
     fzf --no-sort --tiebreak=index --no-multi --reverse --ansi \
-        --header="enter to view, alt-y to copy hash" --preview="$view_commit" \
+        --header="enter to view, ctrl-c to copy hash" --preview="$view_commit" \
         --preview-label="p to toggle preview window" \
         --bind="enter:execute:$view_commit | less -R" \
-        --bind="alt-y:execute:$commit_hash | pbcopy" \
+        --bind="ctrl-c:execute:$commit_hash | tr -d '\n' | pbcopy" \
         --bind="p:toggle-preview"
 }
 
