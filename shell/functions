@@ -45,7 +45,7 @@ fshow() {
         --header="enter to view, alt-y to copy hash" --preview="$view_commit" \
         --preview-label="p to toggle preview window" \
         --bind="enter:execute:$view_commit | less -R" \
-        --bind="alt-y:execute:$commit_hash | xclip -selection clipboard" \
+        --bind="alt-y:execute:$commit_hash | pbcopy" \
         --bind="p:toggle-preview"
 }
 
