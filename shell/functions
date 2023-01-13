@@ -1,10 +1,10 @@
 # Create a new directory and enter it
-function mkd() {
+mkd() {
   mkdir -p "$@" && cd "$@"
 }
 
 # Laravel Tinker helper
-function tinker() {
+tinker() {
   if [ -z "$1" ]
     then
       php artisan tinker
