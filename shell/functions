@@ -55,3 +55,20 @@ h() {
     fzf +s --tac --reverse | \
     sed -E 's/ *[0-9]*\*? *//' | sed -E 's/\\/\\\\/g' | cut -c 18- )
 }
+
+# Fuzzy search for brew uninstall
+fbu() {
+  local selected=$({ brew list -1 --formulae; brew list -1 --cask } |
+    sort -k 1 |
+    fzf --reverse --multi \
+        --preview "HOMEBREW_COLOR=true brew info {}" \
+        --bind "ctrl-p:toggle-preview" \
+        --preview-label="ctrl+p to toggle preview window" \
+        --header="enter to select package to uninstall" \
+        --prompt="❯ brew uninstall " --multi |
+    tr '\n' ' '
+  )
+
+  [[ ! -z $selected ]] &&
+    print -z brew uninstall $selected
+}
