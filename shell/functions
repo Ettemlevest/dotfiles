@@ -43,10 +43,10 @@ fshow() {
         --format="%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset" "$@" | \
     fzf --no-sort --tiebreak=index --no-multi --reverse --ansi \
         --header="enter to view, ctrl-c to copy hash" --preview="$view_commit" \
-        --preview-label="p to toggle preview window" \
+        --preview-label="ctrl+p to toggle preview window" \
         --bind="enter:execute:$view_commit | less -R" \
         --bind="ctrl-c:execute:$commit_hash | tr -d '\n' | pbcopy" \
-        --bind="p:toggle-preview"
+        --bind="ctrl-p:toggle-preview"
 }
 
 # Fuzzy history search
