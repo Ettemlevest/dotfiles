@@ -8,6 +8,7 @@ alias week='date +%V' # week number
 alias path='echo -e ${PATH//:/\\n}'
 alias dl="cd ~/Downloads"
 alias p="cd ~/Projects"
+alias dotfiles="cd ~/.dotfiles"
 # List only directories
 alias lsd="ls -lF ${colorflag} | grep --color=never '^d'"
 
