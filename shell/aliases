@@ -13,6 +13,7 @@ alias p="cd ~/Projects"
 alias dotfiles="cd ~/.dotfiles"
 # List only directories
 alias lsd="ls -lF ${colorflag} | grep --color=never '^d'"
+alias mc="mc --nosubshell"
 
 # Brew
 alias bi="brew install"
