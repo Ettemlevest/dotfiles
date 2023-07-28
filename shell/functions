@@ -5,6 +5,11 @@ mkd() {
   mkdir -v -p "$@" && cd "$@"
 }
 
+# find file - file searching with highlighting
+ff() {
+  find . -iname "*$@*" -exec ls -ld {} + | grep --color=always $@
+}
+
 # Laravel Tinker helper
 tinker() {
   if [ -z "$1" ]
