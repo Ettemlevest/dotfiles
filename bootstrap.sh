@@ -21,6 +21,8 @@ packages=(
     mysql
     node
     php
+    # Fancy
+    cmatrix
 )
 
 # some utilities

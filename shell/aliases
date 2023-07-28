@@ -8,6 +8,7 @@ alias week='date +%V' # week number
 alias cp="cp -iv"
 alias mv="mv -iv"
 alias sgrep="grep -R -n -H -C 5 --exclude-dir={.git,.svn,node_modules,.Trash,vendor}"
+alias matrix="cmatrix -abs"
 
 # Navigation
 alias path='echo -e ${PATH//:/\\n}'
