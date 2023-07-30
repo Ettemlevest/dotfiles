@@ -9,6 +9,7 @@ alias cp="cp -iv"
 alias mv="mv -iv"
 alias sgrep="grep -R -n -H -C 5 --exclude-dir={.git,.svn,node_modules,.Trash,vendor}"
 alias matrix="cmatrix -abs"
+alias top-history="history 0 | awk '{print \$4}' | sort | uniq -c | sort -n -r | head"
 
 # Navigation
 alias path='echo -e ${PATH//:/\\n}'
