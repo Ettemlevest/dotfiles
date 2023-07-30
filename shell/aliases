@@ -19,12 +19,13 @@ alias p="cd ~/Projects"
 alias dotfiles="cd ~/.dotfiles"
 alias mc="mc --nosubshell"
 
-#alias l='exa -aF --icons' # Quick ls
-#alias la='exa -aF --icons' # List all
-#alias ll='exa -laF --icons' # Show details
-#alias lm='exa -lahr --color-scale --icons -s=modified' # Recent
-#alias lb='exa -lahr --color-scale --icons -s=size' # Largest / size
-#alias tree='f() { exa -aF --tree -L=${1:-2} --icons }; f'
+alias ls="lsd -h --group-directories-first"
+alias l="ls"
+alias la="ls -A"
+alias ll="lsd -lAh --group-directories-first --date '+%b %d %X'"
+alias lm="ll --timesort"
+alias lb="ll --sizesort"
+alias tree="ll --tree --depth 2"
 
 # Brew
 alias bi="brew install"

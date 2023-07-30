@@ -11,6 +11,7 @@ packages=(
     fzf
     htop
     lnav
+    lsd
     ripgrep
     tree
     # Essentials (gui)
