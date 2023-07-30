@@ -16,9 +16,14 @@ alias path='echo -e ${PATH//:/\\n}'
 alias dl="cd ~/Downloads"
 alias p="cd ~/Projects"
 alias dotfiles="cd ~/.dotfiles"
-# List only directories
-alias lsd="ls -lF | grep --color=never '^d'"
 alias mc="mc --nosubshell"
+
+#alias l='exa -aF --icons' # Quick ls
+#alias la='exa -aF --icons' # List all
+#alias ll='exa -laF --icons' # Show details
+#alias lm='exa -lahr --color-scale --icons -s=modified' # Recent
+#alias lb='exa -lahr --color-scale --icons -s=size' # Largest / size
+#alias tree='f() { exa -aF --tree -L=${1:-2} --icons }; f'
 
 # Brew
 alias bi="brew install"
