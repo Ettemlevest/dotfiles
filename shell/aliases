@@ -50,6 +50,8 @@ alias build="bash scripts/build.sh"
 alias ci="composer install"
 alias cu="composer update"
 alias sail="./vendor/bin/sail"
+alias phpstan="./vendor/bin/phpstan"
+alias genbaseline="./vendor/bin/phpstan --generate-baseline"
 
 # VSCode
 alias code='open -a "/Applications/Visual Studio Code.app" "`pwd`"'
