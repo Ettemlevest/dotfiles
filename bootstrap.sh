@@ -18,6 +18,7 @@ packages=(
     alt-tab
     keepassxc
     rectangle
+    sanesidebuttons
     # For development
     mysql
     node
