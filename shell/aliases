@@ -25,7 +25,6 @@ alias ll="lsd -lh --group-directories-first --date '+%b %d %X'"
 alias la="lsd -lAh --group-directories-first --date '+%b %d %X'"
 alias lm="ll --timesort"
 alias lb="ll --sizesort"
-alias tree="ll --tree --depth 2"
 
 # Brew
 alias bi="brew install"
@@ -41,6 +40,8 @@ alias gl="git pull"
 alias gsb="git status --short --branch"
 alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify --no-gpg-sign --message "--wip-- [skip ci]"'
 alias gunwip='git log --max-count=1 | grep -q -c "\--wip--" && git reset HEAD~1'
+alias gbdropobsolete="git branch --no-color -vv | grep ': gone]' | awk '{print $1}' | xargs git branch -D"
+alias lazygit='gitui'
 
 # PHP
 alias art="php artisan"
