@@ -11,6 +11,7 @@ alias sgrep="grep -i -R -n -H -C 5 --exclude-dir={.git,.svn,node_modules,.Trash,
 alias matrix="cmatrix -abs"
 alias top-history="history 0 | awk '{print \$4}' | sort | uniq -c | sort -n -r | head"
 alias reload="reset; source ~/.zshrc"
+alias tldr="tldr --color=always --pager"
 
 # Navigation
 alias path='echo -e ${PATH//:/\\n}'
@@ -19,15 +20,15 @@ alias p="cd ~/Projects"
 alias dotfiles="cd ~/.dotfiles"
 alias mc="mc --nosubshell"
 
-alias ls="lsd -h --group-directories-first"
+alias ls="eza --group-directories-first --icons --git"
 alias l="ls"
-alias ll="lsd -lh --group-directories-first --date '+%b %d %X'"
-alias la="lsd -lAh --group-directories-first --date '+%b %d %X'"
-alias lm="ll --timesort"
-alias lb="ll --sizesort"
+alias ll="eza --long --group-directories-first --git --icons --header"
+alias la="ll --all"
+alias lb="ll --sort=size --reverse"
+alias lm="ll --sort=modified --reverse"
+alias tree="ll --tree --level=1"
 
 # Brew
-alias bi="brew install"
 alias bu="brew update && brew outdated"
 alias binfo="brew info"
 alias bsr="brew search"
@@ -47,10 +48,7 @@ alias lazygit='gitui'
 alias art="php artisan"
 alias phpunit="vendor/bin/phpunit"
 alias testdox="vendor/bin/phpunit --testdox -v"
-alias build="bash scripts/build.sh"
 alias ci="composer install"
-alias cu="composer update"
-alias sail="./vendor/bin/sail"
 alias phpstan="./vendor/bin/phpstan"
 alias genbaseline="./vendor/bin/phpstan --generate-baseline"
 
