@@ -1,0 +1,72 @@
+# Taps
+tap "homebrew/bundle"
+tap "homebrew/cask-fonts"
+
+# ===========================================
+# CLI Tools - Already Installed
+# ===========================================
+brew "bat"                    # Cat replacement with syntax highlighting
+brew "bottom"                 # System monitor (htop replacement)
+brew "eza"                    # Modern ls replacement
+brew "fd"                     # Fast find alternative
+brew "fzf"                    # Fuzzy finder
+brew "glow"                   # Markdown renderer
+brew "htop"                   # Interactive process viewer
+brew "httpie"                 # HTTP client
+brew "ncdu"                   # NCurses disk usage
+brew "ripgrep"                # Fast grep replacement
+brew "tealdeer"               # tldr pages
+brew "tmux"                   # Terminal multiplexer
+brew "nnn"                    # File manager
+brew "vifm"                   # Vi file manager
+brew "gitui"                  # Git TUI
+brew "diff-so-fancy"          # Better git diffs (fallback)
+
+# ===========================================
+# CLI Tools - New Additions
+# ===========================================
+brew "zoxide"                 # Smarter cd command (learns your habits)
+brew "git-delta"              # Beautiful git diffs with syntax highlighting
+brew "direnv"                 # Directory-based environment variables
+brew "jq"                     # JSON processor
+brew "yq"                     # YAML processor
+brew "zsh-autosuggestions"    # Fish-like autosuggestions
+
+# ===========================================
+# Development Tools
+# ===========================================
+brew "git"                    # Version control
+brew "imagemagick"            # Image manipulation
+
+# ===========================================
+# Fun
+# ===========================================
+brew "cmatrix"                # Matrix rain effect
+
+# ===========================================
+# Casks - GUI Applications
+# ===========================================
+cask "alt-tab"                # Windows-style alt-tab
+cask "rectangle"              # Window manager
+cask "iterm2"                 # Terminal emulator
+cask "kitty"                  # GPU-accelerated terminal
+cask "hiddenbar"              # Menu bar manager
+cask "monitorcontrol"         # External display brightness
+cask "obsidian"               # Note-taking
+cask "bruno"                  # API client
+cask "postman"                # API testing
+
+# ===========================================
+# QuickLook Plugins
+# ===========================================
+cask "qlcolorcode"            # Syntax highlighting in QuickLook
+cask "qlstephen"              # Preview plain text files without extension
+cask "qlmarkdown"             # Preview Markdown files
+cask "quicklook-json"         # Preview JSON files
+cask "quicklook-csv"          # Preview CSV files
+cask "suspicious-package"     # Preview .pkg installers
+
+# ===========================================
+# Fonts
+# ===========================================
+cask "font-hack-nerd-font"    # Nerd font for terminal icons

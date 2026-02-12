@@ -1,0 +1,66 @@
+[user]
+    name = Imre Nagy
+    email = i.nagy23@outlook.com
+
+[color]
+    ui = auto
+
+[core]
+    editor = vim
+    pager = delta
+    excludesfile = ~/.gitignore_global
+
+[init]
+    defaultBranch = main
+
+[pull]
+    rebase = false
+
+[push]
+    default = current
+    autoSetupRemote = true
+
+[fetch]
+    prune = true
+
+[merge]
+    conflictstyle = diff3
+
+[diff]
+    colorMoved = default
+
+# ============================================
+# Delta Configuration (beautiful diffs)
+# ============================================
+[delta]
+    navigate = true
+    light = false
+    side-by-side = true
+    line-numbers = true
+    syntax-theme = Dracula
+    plus-style = "syntax #003800"
+    minus-style = "syntax #3f0001"
+
+[interactive]
+    diffFilter = delta --color-only
+
+# ============================================
+# Aliases
+# ============================================
+[alias]
+    st = status
+    co = checkout
+    br = branch
+    ci = commit
+    unstage = reset HEAD --
+    last = log -1 HEAD
+    visual = !gitui
+
+    # Pretty log
+    lg = log --graph --pretty=format:'%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+
+    # List contributors
+    contributors = shortlog --summary --numbered
+
+[log]
+    date = iso-local

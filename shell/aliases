@@ -1,10 +1,53 @@
-# General
+# ============================================
+# Modern CLI Tool Replacements (Conditional)
+# ============================================
+
+# eza replaces ls
+if command -v eza &> /dev/null; then
+    alias ls="eza --group-directories-first --icons --git"
+    alias l="ls"
+    alias ll="eza --long --group-directories-first --git --icons --header"
+    alias la="ll --all"
+    alias lb="ll --sort=size --reverse"
+    alias lm="ll --sort=modified --reverse"
+    alias lt="eza --tree --level=2 --icons --git"
+    alias tree="eza --tree --icons --git"
+fi
+
+# bat replaces cat
+if command -v bat &> /dev/null; then
+    alias cat="bat --paging=never"
+    alias catp="bat"  # bat with pager
+fi
+
+# bottom replaces htop/top
+if command -v btm &> /dev/null; then
+    alias top="btm"
+    alias htop="btm"
+fi
+
+# ripgrep enhances grep (keep sgrep as custom search)
+if command -v rg &> /dev/null; then
+    alias rgrep="rg"
+fi
+
+# ============================================
+# Zoxide Navigation
+# ============================================
+if command -v zoxide &> /dev/null; then
+    alias cd="z"
+    alias cdi="zi"  # Interactive selection
+fi
+
+# ============================================
+# General System
+# ============================================
 alias hostfile="sudo vim /etc/hosts"
 alias sshconfig="vim ~/.ssh/config"
 alias copykey="command cat ~/.ssh/id_ed25519.pub | pbcopy"
 alias ip="dig @resolver4.opendns.com myip.opendns.com +short"
 alias localip="ifconfig | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p'"
-alias week="date '+Week %V, %j. day of year'" # week number
+alias week="date '+Week %V, %j. day of year'"
 alias cp="cp -iv"
 alias mv="mv -iv"
 alias sgrep="grep -i -R -n -H -C 5 --exclude-dir={.git,.svn,node_modules,.Trash,vendor}"
@@ -13,44 +56,83 @@ alias top-history="history 0 | awk '{print \$4}' | sort | uniq -c | sort -n -r |
 alias reload="reset; source ~/.zshrc"
 alias tldr="tldr --color=always --pager"
 
+# Flush DNS cache
+alias flushdns="sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder"
+
+# Show/hide hidden files in Finder
+alias showfiles="defaults write com.apple.finder AppleShowAllFiles -bool true && killall Finder"
+alias hidefiles="defaults write com.apple.finder AppleShowAllFiles -bool false && killall Finder"
+
+# Open current directory
+alias o="open ."
+
+# ============================================
 # Navigation
+# ============================================
 alias path='echo -e ${PATH//:/\\n}'
 alias dl="cd ~/Downloads"
 alias p="cd ~/Projects"
 alias dotfiles="cd ~/.dotfiles"
 alias mc="mc --nosubshell"
+alias ..="cd .."
+alias ...="cd ../.."
+alias ....="cd ../../.."
 
-alias ls="eza --group-directories-first --icons --git"
-alias l="ls"
-alias ll="eza --long --group-directories-first --git --icons --header"
-alias la="ll --all"
-alias lb="ll --sort=size --reverse"
-alias lm="ll --sort=modified --reverse"
-alias tree="ll --tree --level=1"
-
-# Brew
+# ============================================
+# Homebrew
+# ============================================
 alias bu="brew update && brew outdated"
+alias bup="brew upgrade"
 alias binfo="brew info"
 alias bsr="brew search"
+alias bclean="brew cleanup --prune=all"
 
+# ============================================
 # Git
-alias nah="git reset --hard;git clean -df"
+# ============================================
+alias nah="git reset --hard; git clean -df"
 alias gfa="git fetch --all --prune --jobs=10"
 alias gco="git checkout"
 alias gl="git pull"
+alias gp="git push"
+alias gpo="git push origin"
+alias gm="git merge"
 alias gsb="git status --short --branch"
 alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify --no-gpg-sign --message "--wip-- [skip ci]"'
 alias gunwip='git log --max-count=1 | grep -q -c "\--wip--" && git reset HEAD~1'
-alias gbdropobsolete="git branch --no-color -vv | grep ': gone]' | awk '{print $1}' | xargs git branch -D"
+alias gbdropobsolete="git branch --no-color -vv | grep ': gone]' | awk '{print \$1}' | xargs git branch -D"
 alias lazygit='gitui'
+alias uncommit="git reset --soft HEAD~1"
 
-# PHP
+# ============================================
+# PHP / Laravel
+# ============================================
 alias art="php artisan"
+alias artisan="php artisan"
+alias mfs="php artisan migrate:fresh --seed"
 alias phpunit="vendor/bin/phpunit"
 alias testdox="vendor/bin/phpunit --testdox -v"
 alias ci="composer install"
+alias cu="composer update"
+alias cr="composer require"
+alias cda="composer dump-autoload -o"
 alias phpstan="./vendor/bin/phpstan"
 alias genbaseline="./vendor/bin/phpstan --generate-baseline"
+alias pest="./vendor/bin/pest"
 
-# VSCode
+# ============================================
+# Applications
+# ============================================
 alias code='open -a "/Applications/Visual Studio Code.app" "`pwd`"'
+alias storm='open -a "PhpStorm" "`pwd`"'
+
+# ============================================
+# JSON/YAML Processing
+# ============================================
+if command -v jq &> /dev/null; then
+    alias json="jq ."
+fi
+
+if command -v yq &> /dev/null; then
+    alias yaml="yq ."
+fi

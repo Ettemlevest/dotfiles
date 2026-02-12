@@ -1,24 +1,256 @@
-# TODO: organize functions, this is a mess ATM (maybe separate files?)
+# ============================================
+# Directory Operations
+# ============================================
 
 # Create a new directory and enter it
 mkd() {
-  mkdir -v -p "$@" && cd "$@"
+    mkdir -v -p "$@" && cd "$@"
 }
 
-# find file - file searching with highlighting
-ff() {
-  find . -iname "*$@*" -exec ls -ld {} + | grep --color=always $@
+# Determine size of a file or total size of a directory
+fs() {
+    if du -b /dev/null > /dev/null 2>&1; then
+        local arg=-sbh
+    else
+        local arg=-sh
+    fi
+    if [[ -n "$@" ]]; then
+        du $arg -- "$@"
+    else
+        du $arg .[^.]* ./*
+    fi
 }
+
+# `tre` is a shorthand for `tree` with hidden files and color enabled
+tre() {
+    tree -aC -I '.git|node_modules|bower_components|vendor' --dirsfirst "$@" | less -FRNX
+}
+
+# ============================================
+# Search Functions
+# ============================================
+
+# Find file - file searching with highlighting
+ff() {
+    find . -iname "*$@*" -exec ls -ld {} + | grep --color=always $@
+}
+
+# ============================================
+# Laravel Functions
+# ============================================
 
 # Laravel Tinker helper
 tinker() {
-  if [ -z "$1" ]
-    then
-      php artisan tinker
+    if [ -z "$1" ]; then
+        php artisan tinker
     else
-      php artisan tinker --execute="dd($1);"
-  fi
+        php artisan tinker --execute="dd($1);"
+    fi
 }
+
+# Quick Laravel test runner (uses Pest if available, falls back to PHPUnit)
+t() {
+    if [[ -f vendor/bin/pest ]]; then
+        if [ -z "$1" ]; then
+            vendor/bin/pest
+        else
+            vendor/bin/pest --filter "$1"
+        fi
+    else
+        if [ -z "$1" ]; then
+            vendor/bin/phpunit
+        else
+            vendor/bin/phpunit --filter "$1"
+        fi
+    fi
+}
+
+# Laravel scheduler runner
+scheduler() {
+    while true; do
+        php artisan schedule:run
+        echo "Sleeping for 60 seconds..."
+        sleep 60
+    done
+}
+
+# Quickly serve current directory
+serve() {
+    local port="${1:-8000}"
+    php -S localhost:"$port"
+}
+
+# Create a new Laravel project
+laravel-new() {
+    if [ -z "$1" ]; then
+        echo "Usage: laravel-new <project-name>"
+        return 1
+    fi
+    composer create-project laravel/laravel "$1"
+    cd "$1" || return
+    echo "Laravel project '$1' created and ready!"
+}
+
+# ============================================
+# Database Functions
+# ============================================
+
+# Database management function (works with Herd MySQL)
+db() {
+    local mysql_cmd="mysql"
+
+    case "$1" in
+        create)
+            if [ -z "$2" ]; then
+                echo "Usage: db create <database_name>"
+                return 1
+            fi
+            $mysql_cmd -e "CREATE DATABASE IF NOT EXISTS \`$2\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+            echo "Database '$2' created."
+            ;;
+        drop)
+            if [ -z "$2" ]; then
+                echo "Usage: db drop <database_name>"
+                return 1
+            fi
+            echo -n "Are you sure you want to drop '$2'? [y/N] "
+            read -r response
+            if [[ "$response" =~ ^[Yy]$ ]]; then
+                $mysql_cmd -e "DROP DATABASE IF EXISTS \`$2\`;"
+                echo "Database '$2' dropped."
+            fi
+            ;;
+        list)
+            $mysql_cmd -e "SHOW DATABASES;" | grep -Ev "^(Database|information_schema|mysql|performance_schema|sys)$"
+            ;;
+        refresh)
+            if [ -z "$2" ]; then
+                echo "Usage: db refresh <database_name>"
+                return 1
+            fi
+            $mysql_cmd -e "DROP DATABASE IF EXISTS \`$2\`; CREATE DATABASE \`$2\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+            echo "Database '$2' refreshed."
+            ;;
+        *)
+            echo "Usage: db <create|drop|list|refresh> [database_name]"
+            echo ""
+            echo "Commands:"
+            echo "  create <name>  - Create a new database"
+            echo "  drop <name>    - Drop a database (with confirmation)"
+            echo "  list           - List all databases"
+            echo "  refresh <name> - Drop and recreate a database"
+            ;;
+    esac
+}
+
+# ============================================
+# Git Functions
+# ============================================
+
+# Clean up local git branches that no longer exist on remote
+git-prune-local() {
+    git fetch --prune
+
+    local branches=()
+    while IFS= read -r branch; do
+        [[ -z "$branch" ]] && continue
+        if ! git rev-parse --verify "origin/$branch" &>/dev/null; then
+            branches+=("$branch")
+        fi
+    done < <(git branch --format='%(refname:short)' | grep -v "^main$\|^master$\|^develop$")
+
+    if [[ ${#branches[@]} -eq 0 ]]; then
+        echo "No local branches to prune."
+        return 0
+    fi
+
+    echo "The following local branches have no remote counterpart:"
+    printf '  %s\n' "${branches[@]}"
+    echo ""
+    echo -n "Delete these branches? [y/N] "
+    read -r response
+
+    if [[ "$response" =~ ^[Yy]$ ]]; then
+        for branch in "${branches[@]}"; do
+            git branch -D "$branch"
+        done
+        echo "Branches deleted."
+    else
+        echo "Aborted."
+    fi
+}
+
+# Open current git repo in browser
+repo() {
+    local url
+    url=$(git config --get remote.origin.url)
+
+    if [ -z "$url" ]; then
+        echo "No remote origin found"
+        return 1
+    fi
+
+    # Convert SSH URL to HTTPS
+    url=$(echo "$url" | sed -e 's/git@/https:\/\//' -e 's/\.git$//' -e 's/:/\//' | sed 's/https:\/\/\//https:\/\//')
+
+    open "$url"
+}
+
+# ============================================
+# FZF Functions (existing)
+# ============================================
+
+# Git commit browser (uses delta if available)
+fshow() {
+    local diff_cmd
+    if command -v delta &> /dev/null; then
+        diff_cmd="delta"
+    elif command -v diff-so-fancy &> /dev/null; then
+        diff_cmd="diff-so-fancy"
+    else
+        diff_cmd="cat"
+    fi
+
+    local commit_hash="echo {} | grep -o '[a-f0-9]\{7\}' | head -1"
+    local view_commit="$commit_hash | xargs -I % sh -c 'git show --color=always % | $diff_cmd'"
+
+    git log --color=always \
+        --format="%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset" "$@" | \
+    fzf --no-sort --tiebreak=index --no-multi --reverse --ansi \
+        --header="enter to view, ctrl-c to copy hash" --preview="$view_commit" \
+        --preview-label="ctrl+p to toggle preview window" \
+        --bind="enter:execute:$view_commit | less -R" \
+        --bind="ctrl-c:execute:$commit_hash | tr -d '\n' | pbcopy" \
+        --bind="ctrl-p:toggle-preview"
+}
+
+# Fuzzy history search
+h() {
+    print -z $( ([ -n "$ZSH_NAME" ] && fc -li 1 || history -i) | \
+        fzf +s --tac --reverse | \
+        sed -E 's/ *[0-9]*\*? *//' | sed -E 's/\\/\\\\/g' | cut -c 18- )
+}
+
+# Fuzzy search for brew uninstall
+fbu() {
+    local selected=$({ brew list -1 --formulae; brew list -1 --cask } |
+        sort -k 1 |
+        fzf --reverse --multi \
+            --preview "HOMEBREW_COLOR=true brew info {}" \
+            --bind "ctrl-p:toggle-preview" \
+            --preview-label="ctrl+p to toggle preview window" \
+            --header="enter to select package to uninstall" \
+            --prompt="brew uninstall " --multi |
+        tr '\n' ' '
+    )
+
+    [[ ! -z $selected ]] &&
+        print -z brew uninstall $selected
+}
+
+# ============================================
+# Network Functions
+# ============================================
 
 # Weather
 weather() {
@@ -29,6 +261,28 @@ weather() {
 ip-address() {
     curl -s -H "Accept: application/json" "https://ipinfo.io/${1:-}"
 }
+
+# Enhanced DNS lookup with all records
+digga() {
+    if [ -z "$1" ]; then
+        echo "Usage: digga <domain>"
+        return 1
+    fi
+    dig +nocmd "$1" any +multiline +noall +answer
+}
+
+# Remove a host from SSH known_hosts
+removehost() {
+    if [ -z "$1" ]; then
+        echo "Usage: removehost <hostname_or_ip>"
+        return 1
+    fi
+    ssh-keygen -R "$1"
+}
+
+# ============================================
+# File Functions
+# ============================================
 
 # Print README file
 readme() {
@@ -42,111 +296,51 @@ readme() {
     done
 }
 
-# Git commit browser
-fshow() {
-    local commit_hash="echo {} | grep -o '[a-f0-9]\{7\}' | head -1"
-    local view_commit="$commit_hash | xargs -I % sh -c 'git show --color=always % | diff-so-fancy'"
-    git log --color=always \
-        --format="%Cred%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%ar) %C(bold blue)<%an>%Creset" "$@" | \
-    fzf --no-sort --tiebreak=index --no-multi --reverse --ansi \
-        --header="enter to view, ctrl-c to copy hash" --preview="$view_commit" \
-        --preview-label="ctrl+p to toggle preview window" \
-        --bind="enter:execute:$view_commit | less -R" \
-        --bind="ctrl-c:execute:$commit_hash | tr -d '\n' | pbcopy" \
-        --bind="ctrl-p:toggle-preview"
-}
-
-# Fuzzy history search
-h() {
-  print -z $( ([ -n "$ZSH_NAME" ] && fc -li 1 || history -i) | \
-    fzf +s --tac --reverse | \
-    sed -E 's/ *[0-9]*\*? *//' | sed -E 's/\\/\\\\/g' | cut -c 18- )
-}
-
-# Fuzzy search for brew uninstall
-fbu() {
-  local selected=$({ brew list -1 --formulae; brew list -1 --cask } |
-    sort -k 1 |
-    fzf --reverse --multi \
-        --preview "HOMEBREW_COLOR=true brew info {}" \
-        --bind "ctrl-p:toggle-preview" \
-        --preview-label="ctrl+p to toggle preview window" \
-        --header="enter to select package to uninstall" \
-        --prompt="❯ brew uninstall " --multi |
-    tr '\n' ' '
-  )
-
-  [[ ! -z $selected ]] &&
-    print -z brew uninstall $selected
-}
-
-# Determine size of a file or total size of a directory
-function fs() {
-	if du -b /dev/null > /dev/null 2>&1; then
-		local arg=-sbh;
-	else
-		local arg=-sh;
-	fi
-	if [[ -n "$@" ]]; then
-		du $arg -- "$@";
-	else
-		du $arg .[^.]* ./*;
-	fi;
-}
-
+# URL encoding
 urlencode() {
     setopt localoptions extendedglob
     input=( ${(s::)1} )
     print ${(j::)input/(#b)([^A-Za-z0-9_.\!~*\'\(\)-])/%${(l:2::0:)$(([##16]#match))}}
 }
 
-# `tre` is a shorthand for `tree` with hidden files and color enabled, ignoring
-# the `.git` directory, listing directories first. The output gets piped into
-# `less` with options to preserve color and line numbers, unless the output is
-# small enough for one screen.
-function tre() {
-	tree -aC -I '.git|node_modules|bower_components' --dirsfirst "$@" | less -FRNX;
-}
+# Create a .tar.gz archive
+targz() {
+    local tmpFile="${@%/}.tar"
+    tar -cvf "${tmpFile}" --exclude=".DS_Store" "${@}" || return 1
 
-# Create a .tar.gz archive, using `zopfli`, `pigz` or `gzip` for compression
-function targz() {
-	local tmpFile="${@%/}.tar";
-	tar -cvf "${tmpFile}" --exclude=".DS_Store" "${@}" || return 1;
+    size=$(
+        stat -f"%z" "${tmpFile}" 2> /dev/null
+        stat -c"%s" "${tmpFile}" 2> /dev/null
+    )
 
-	size=$(
-		stat -f"%z" "${tmpFile}" 2> /dev/null; # macOS `stat`
-		stat -c"%s" "${tmpFile}" 2> /dev/null;  # GNU `stat`
-	);
+    local cmd=""
+    if (( size < 52428800 )) && hash zopfli 2> /dev/null; then
+        cmd="zopfli"
+    else
+        if hash pigz 2> /dev/null; then
+            cmd="pigz"
+        else
+            cmd="gzip"
+        fi
+    fi
 
-	local cmd="";
-	if (( size < 52428800 )) && hash zopfli 2> /dev/null; then
-		# the .tar file is smaller than 50 MB and Zopfli is available; use it
-		cmd="zopfli";
-	else
-		if hash pigz 2> /dev/null; then
-			cmd="pigz";
-		else
-			cmd="gzip";
-		fi;
-	fi;
+    echo "Compressing .tar ($((size / 1000)) kB) using \`${cmd}\`..."
+    "${cmd}" -v "${tmpFile}" || return 1
+    [ -f "${tmpFile}" ] && rm "${tmpFile}"
 
-	echo "Compressing .tar ($((size / 1000)) kB) using \`${cmd}\`…";
-	"${cmd}" -v "${tmpFile}" || return 1;
-	[ -f "${tmpFile}" ] && rm "${tmpFile}";
+    zippedSize=$(
+        stat -f"%z" "${tmpFile}.gz" 2> /dev/null
+        stat -c"%s" "${tmpFile}.gz" 2> /dev/null
+    )
 
-	zippedSize=$(
-		stat -f"%z" "${tmpFile}.gz" 2> /dev/null; # macOS `stat`
-		stat -c"%s" "${tmpFile}.gz" 2> /dev/null; # GNU `stat`
-	);
-
-	echo "${tmpFile}.gz ($((zippedSize / 1000)) kB) created successfully.";
+    echo "${tmpFile}.gz ($((zippedSize / 1000)) kB) created successfully."
 }
 
 # Compare original and gzipped file size
-function gz() {
-	local origsize=$(wc -c < "$1");
-	local gzipsize=$(gzip -c "$1" | wc -c);
-	local ratio=$(echo "${gzipsize} * 100 / ${origsize}" | /usr/bin/bc -l);
-	printf "orig: %d bytes\n" "${origsize}";
-	printf "gzip: %d bytes (%2.2f%%)\n" "${gzipsize}" "{$ratio}";
+gz() {
+    local origsize=$(wc -c < "$1")
+    local gzipsize=$(gzip -c "$1" | wc -c)
+    local ratio=$(echo "${gzipsize} * 100 / ${origsize}" | /usr/bin/bc -l)
+    printf "orig: %d bytes\n" "${origsize}"
+    printf "gzip: %d bytes (%2.2f%%)\n" "${gzipsize}" "${ratio}"
 }
