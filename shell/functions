@@ -25,11 +25,6 @@ fs() {
     fi
 }
 
-# `tre` is a shorthand for `tree` with hidden files and color enabled
-tre() {
-    tree -aC -I '.git|node_modules|bower_components|vendor' --dirsfirst "$@" | less -FRNX
-}
-
 # ============================================
 # Search Functions
 # ============================================
@@ -205,7 +200,7 @@ repo() {
 }
 
 # ============================================
-# FZF Functions (existing)
+# FZF Functions
 # ============================================
 
 # Git commit browser (uses delta if available)
@@ -213,8 +208,6 @@ fshow() {
     local diff_cmd
     if command -v delta &> /dev/null; then
         diff_cmd="delta"
-    elif command -v diff-so-fancy &> /dev/null; then
-        diff_cmd="diff-so-fancy"
     else
         diff_cmd="cat"
     fi

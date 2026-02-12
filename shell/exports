@@ -24,11 +24,8 @@ export DEFAULT_USER="imi"
 # History Configuration
 # ============================================
 export HISTSIZE=50000
-export HISTFILESIZE=50000
+export SAVEHIST=50000
 export HIST_STAMPS="yyyy-mm-dd"
-export HISTIMEFORMAT="[%F %T] "
-export HISTCONTROL="ignoredups:erasedups"
-export HISTIGNORE="ls:cd:cd -:pwd:exit:date:* --help:l:ll:la:bg:fg:history:clear"
 export HISTORY_IGNORE="([bf]g|c|clear|e|exit|h|history|incognito|l|l[adfls]|pwd|z)"
 
 # ============================================

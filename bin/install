@@ -72,6 +72,18 @@ ln -sf "$DOTFILES_DIR/shell/backup" "$HOME/.local/bin/backup"
 success "Linked backup script"
 
 # ============================================
+# Zsh Syntax Highlighting (OMZ custom plugin)
+# ============================================
+ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
+if [[ ! -d "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting" ]]; then
+    log "Installing zsh-syntax-highlighting..."
+    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
+    success "Installed zsh-syntax-highlighting"
+else
+    log "zsh-syntax-highlighting already installed"
+fi
+
+# ============================================
 # FZF Installation (key bindings)
 # ============================================
 if command -v fzf &> /dev/null; then

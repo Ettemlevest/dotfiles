@@ -1,35 +1,31 @@
 # Taps
 tap "homebrew/bundle"
-tap "homebrew/cask-fonts"
 
 # ===========================================
-# CLI Tools - Already Installed
+# CLI Tools
 # ===========================================
 brew "bat"                    # Cat replacement with syntax highlighting
 brew "bottom"                 # System monitor (htop replacement)
+brew "direnv"                 # Directory-based environment variables
 brew "eza"                    # Modern ls replacement
 brew "fd"                     # Fast find alternative
 brew "fzf"                    # Fuzzy finder
+brew "git-delta"              # Beautiful git diffs with syntax highlighting
+brew "gitui"                  # Git TUI
 brew "glow"                   # Markdown renderer
 brew "htop"                   # Interactive process viewer
 brew "httpie"                 # HTTP client
+brew "jq"                     # JSON processor
+brew "mc"                     # Midnight Commander file manager
 brew "ncdu"                   # NCurses disk usage
+brew "nnn"                    # File manager
 brew "ripgrep"                # Fast grep replacement
 brew "tealdeer"               # tldr pages
 brew "tmux"                   # Terminal multiplexer
-brew "nnn"                    # File manager
+brew "tmux-mem-cpu-load"      # CPU/memory stats for tmux status bar
 brew "vifm"                   # Vi file manager
-brew "gitui"                  # Git TUI
-brew "diff-so-fancy"          # Better git diffs (fallback)
-
-# ===========================================
-# CLI Tools - New Additions
-# ===========================================
-brew "zoxide"                 # Smarter cd command (learns your habits)
-brew "git-delta"              # Beautiful git diffs with syntax highlighting
-brew "direnv"                 # Directory-based environment variables
-brew "jq"                     # JSON processor
 brew "yq"                     # YAML processor
+brew "zoxide"                 # Smarter cd command (learns your habits)
 brew "zsh-autosuggestions"    # Fish-like autosuggestions
 
 # ===========================================
