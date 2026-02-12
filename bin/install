@@ -66,6 +66,11 @@ backup_if_exists "$HOME/.gitconfig"
 ln -sf "$DOTFILES_DIR/git/.gitconfig" "$HOME/.gitconfig"
 success "Linked .gitconfig"
 
+# Scripts
+mkdir -p "$HOME/.local/bin"
+ln -sf "$DOTFILES_DIR/shell/backup" "$HOME/.local/bin/backup"
+success "Linked backup script"
+
 # ============================================
 # FZF Installation (key bindings)
 # ============================================

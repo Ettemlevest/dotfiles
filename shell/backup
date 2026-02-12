@@ -1,0 +1,139 @@
+#!/usr/bin/env bash
+set -e
+
+# Colors
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+BLUE='\033[0;34m'
+YELLOW='\033[1;33m'
+NC='\033[0m'
+
+log() { echo -e "${BLUE}==>${NC} $1"; }
+success() { echo -e "${GREEN}==>${NC} $1"; }
+warn() { echo -e "${YELLOW}==>${NC} $1"; }
+error() { echo -e "${RED}==>${NC} $1" >&2; }
+
+usage() {
+    echo "Usage: backup <input_path> [output_path]"
+    echo ""
+    echo "Create an encrypted, checksum-verified backup."
+    echo ""
+    echo "  input_path   File or directory to back up (required)"
+    echo "  output_path  Output .tar.gz.gpg file (optional)"
+    echo "               Defaults to <name>-backup-<YYYY-MM-DD>.tar.gz.gpg"
+    exit 1
+}
+
+# ============================================
+# Argument parsing
+# ============================================
+[[ $# -lt 1 || "$1" == "-h" || "$1" == "--help" ]] && usage
+
+input_path="$(cd "$(dirname "$1")" && pwd)/$(basename "$1")"
+input_name="$(basename "$input_path")"
+
+if [[ ! -e "$input_path" ]]; then
+    error "Input path does not exist: $1"
+    exit 1
+fi
+
+if [[ -n "$2" ]]; then
+    output_path="$2"
+else
+    output_path="${input_name}-backup-$(date +%Y-%m-%d).tar.gz.gpg"
+fi
+
+# ============================================
+# Dependency checks
+# ============================================
+log "Checking dependencies..."
+
+if ! command -v gpg &> /dev/null; then
+    error "gpg is required but not installed"
+    exit 1
+fi
+
+if ! command -v tar &> /dev/null; then
+    error "tar is required but not installed"
+    exit 1
+fi
+
+if command -v sha256sum &> /dev/null; then
+    SHA256CMD="sha256sum"
+    SHA256CHECK="sha256sum -c --quiet"
+elif command -v shasum &> /dev/null; then
+    SHA256CMD="shasum -a 256"
+    SHA256CHECK="shasum -a 256 -c --quiet"
+else
+    error "sha256sum or shasum is required but neither is installed"
+    exit 1
+fi
+
+# ============================================
+# Setup temp directory with cleanup trap
+# ============================================
+tmpdir=$(mktemp -d)
+trap 'rm -rf -- "$tmpdir"' EXIT
+
+# ============================================
+# Create backup
+# ============================================
+echo ""
+log "Creating backup of ${input_name}..."
+
+# Generate per-file SHA256 checksums
+log "Generating checksums..."
+parent_dir="$(dirname "$input_path")"
+
+if [[ -d "$input_path" ]]; then
+    (cd "$parent_dir" && find "$input_name" -type f -print0 | sort -z | xargs -0 $SHA256CMD) > "$tmpdir/checksums.sha256"
+else
+    (cd "$parent_dir" && $SHA256CMD "$input_name") > "$tmpdir/checksums.sha256"
+fi
+
+file_count=$(wc -l < "$tmpdir/checksums.sha256" | tr -d ' ')
+log "Checksummed ${file_count} file(s)"
+
+# Create compressed tarball with checksums embedded
+log "Compressing..."
+cp "$tmpdir/checksums.sha256" "$parent_dir/checksums.sha256"
+(cd "$parent_dir" && tar -czf "$tmpdir/archive.tar.gz" checksums.sha256 "$input_name")
+rm -f "$parent_dir/checksums.sha256"
+
+# Encrypt with GPG (symmetric, AES256)
+log "Encrypting..."
+gpg --batch --yes --symmetric \
+    --cipher-algo AES256 \
+    --s2k-digest-algo SHA512 \
+    --compress-algo none \
+    -o "$output_path" "$tmpdir/archive.tar.gz"
+
+# ============================================
+# Verification (full round-trip)
+# ============================================
+echo ""
+log "Verifying backup integrity..."
+
+verify_dir="$tmpdir/verify"
+mkdir -p "$verify_dir"
+
+# Decrypt
+gpg --batch --yes --decrypt -o "$verify_dir/archive.tar.gz" "$output_path" 2>/dev/null
+
+# Extract
+tar -xzf "$verify_dir/archive.tar.gz" -C "$verify_dir"
+
+# Verify checksums
+if (cd "$verify_dir" && $SHA256CHECK checksums.sha256); then
+    echo ""
+    backup_size=$(du -h "$output_path" | cut -f1)
+    success "Backup verified successfully!"
+    log "Output: ${output_path}"
+    log "Size:   ${backup_size}"
+    log "Files:  ${file_count}"
+else
+    echo ""
+    error "Backup verification FAILED — checksums do not match"
+    rm -f "$output_path"
+    exit 1
+fi
