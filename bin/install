@@ -71,6 +71,16 @@ mkdir -p "$HOME/.local/bin"
 ln -sf "$DOTFILES_DIR/shell/backup" "$HOME/.local/bin/backup"
 success "Linked backup script"
 
+# Claude Code
+mkdir -p "$HOME/.claude"
+backup_if_exists "$HOME/.claude/settings.json"
+ln -sf "$DOTFILES_DIR/config/claude/settings.json" "$HOME/.claude/settings.json"
+success "Linked Claude Code settings"
+
+backup_if_exists "$HOME/.claude/CLAUDE.md"
+ln -sf "$DOTFILES_DIR/config/claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
+success "Linked Claude Code CLAUDE.md"
+
 # ============================================
 # Zsh Syntax Highlighting (OMZ custom plugin)
 # ============================================
