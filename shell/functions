@@ -4,7 +4,11 @@
 
 # Create a new directory and enter it
 mkd() {
-    mkdir -v -p "$@" && cd "$@"
+    if [[ $# -eq 0 ]]; then
+        echo "Usage: mkd <directory>" >&2
+        return 1
+    fi
+    mkdir -v -p "$@" && cd "${@: -1}"
 }
 
 # Determine size of a file or total size of a directory
@@ -14,10 +18,10 @@ fs() {
     else
         local arg=-sh
     fi
-    if [[ -n "$@" ]]; then
-        du $arg -- "$@"
+    if [[ $# -gt 0 ]]; then
+        du "$arg" -- "$@"
     else
-        du $arg .[^.]* ./*
+        du "$arg" .[^.]* ./*
     fi
 }
 
@@ -32,7 +36,11 @@ tre() {
 
 # Find file - file searching with highlighting
 ff() {
-    find . -iname "*$@*" -exec ls -ld {} + | grep --color=always $@
+    if [[ $# -eq 0 ]]; then
+        echo "Usage: ff <pattern>" >&2
+        return 1
+    fi
+    find . -iname "*$1*" -exec ls -ld {} + | grep --color=always "$1"
 }
 
 # ============================================
@@ -244,8 +252,8 @@ fbu() {
         tr '\n' ' '
     )
 
-    [[ ! -z $selected ]] &&
-        print -z brew uninstall $selected
+    [[ -n "$selected" ]] &&
+        print -z brew uninstall "$selected"
 }
 
 # ============================================
@@ -287,11 +295,13 @@ removehost() {
 # Print README file
 readme() {
     for readme in {readme,README}.{md,MD,markdown,mkd,txt,TXT}; do
-        if [[ -x "$(command -v glow)" ]] && [[ -f "$readme" ]]; then
-            glow -p "$readme"
+        if [[ -f "$readme" ]]; then
+            if command -v glow &>/dev/null; then
+                glow -p "$readme"
+            else
+                cat "$readme"
+            fi
             break
-        elif [[ -f "$readme" ]]; then
-            cat "$readme"
         fi
     done
 }
@@ -308,10 +318,7 @@ targz() {
     local tmpFile="${@%/}.tar"
     tar -cvf "${tmpFile}" --exclude=".DS_Store" "${@}" || return 1
 
-    size=$(
-        stat -f"%z" "${tmpFile}" 2> /dev/null
-        stat -c"%s" "${tmpFile}" 2> /dev/null
-    )
+    size=$(stat -f"%z" "${tmpFile}" 2>/dev/null || stat -c"%s" "${tmpFile}" 2>/dev/null)
 
     local cmd=""
     if (( size < 52428800 )) && hash zopfli 2> /dev/null; then
@@ -328,16 +335,17 @@ targz() {
     "${cmd}" -v "${tmpFile}" || return 1
     [ -f "${tmpFile}" ] && rm "${tmpFile}"
 
-    zippedSize=$(
-        stat -f"%z" "${tmpFile}.gz" 2> /dev/null
-        stat -c"%s" "${tmpFile}.gz" 2> /dev/null
-    )
+    zippedSize=$(stat -f"%z" "${tmpFile}.gz" 2>/dev/null || stat -c"%s" "${tmpFile}.gz" 2>/dev/null)
 
     echo "${tmpFile}.gz ($((zippedSize / 1000)) kB) created successfully."
 }
 
 # Compare original and gzipped file size
 gz() {
+    if [[ $# -eq 0 || ! -f "$1" ]]; then
+        echo "Usage: gz <file>" >&2
+        return 1
+    fi
     local origsize=$(wc -c < "$1")
     local gzipsize=$(gzip -c "$1" | wc -c)
     local ratio=$(echo "${gzipsize} * 100 / ${origsize}" | /usr/bin/bc -l)

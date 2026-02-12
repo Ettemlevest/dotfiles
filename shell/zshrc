@@ -12,7 +12,7 @@ plugins=(
     zsh-syntax-highlighting
 )
 
-source $ZSH/oh-my-zsh.sh
+source "$ZSH/oh-my-zsh.sh"
 
 # ============================================
 # History Settings
@@ -25,10 +25,10 @@ setopt INC_APPEND_HISTORY
 # ============================================
 # Source Custom Configuration Files
 # ============================================
-source $HOME/.dotfiles/shell/exports
-source $HOME/.dotfiles/shell/aliases
-source $HOME/.dotfiles/shell/functions
-[[ -f $HOME/.dotfiles/shell/secrets ]] && source $HOME/.dotfiles/shell/secrets
+source "$HOME/.dotfiles/shell/exports"
+source "$HOME/.dotfiles/shell/aliases"
+source "$HOME/.dotfiles/shell/functions"
+[[ -f "$HOME/.dotfiles/shell/secrets" ]] && source "$HOME/.dotfiles/shell/secrets"
 
 # ============================================
 # Tool Integrations
@@ -63,21 +63,22 @@ if command -v fzf &> /dev/null; then
     '
 
     # Source FZF keybindings if installed via Homebrew
-    [[ -f $(brew --prefix)/opt/fzf/shell/key-bindings.zsh ]] && source $(brew --prefix)/opt/fzf/shell/key-bindings.zsh
-    [[ -f $(brew --prefix)/opt/fzf/shell/completion.zsh ]] && source $(brew --prefix)/opt/fzf/shell/completion.zsh
+    brew_prefix="$(brew --prefix)"
+    [[ -f "$brew_prefix/opt/fzf/shell/key-bindings.zsh" ]] && source "$brew_prefix/opt/fzf/shell/key-bindings.zsh"
+    [[ -f "$brew_prefix/opt/fzf/shell/completion.zsh" ]] && source "$brew_prefix/opt/fzf/shell/completion.zsh"
 fi
 
 # ============================================
 # Laravel Herd Configuration
 # ============================================
-export PATH="/Users/imi/Library/Application Support/Herd/bin/":$PATH
+export PATH="$HOME/Library/Application Support/Herd/bin/:$PATH"
 
-export NVM_DIR="/Users/imi/Library/Application Support/Herd/config/nvm"
+export NVM_DIR="$HOME/Library/Application Support/Herd/config/nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
 [[ -f "/Applications/Herd.app/Contents/Resources/config/shell/zshrc.zsh" ]] && \
     builtin source "/Applications/Herd.app/Contents/Resources/config/shell/zshrc.zsh"
 
-export HERD_PHP_82_INI_SCAN_DIR="/Users/imi/Library/Application Support/Herd/config/php/82/"
-export HERD_PHP_83_INI_SCAN_DIR="/Users/imi/Library/Application Support/Herd/config/php/83/"
-export HERD_PHP_84_INI_SCAN_DIR="/Users/imi/Library/Application Support/Herd/config/php/84/"
+export HERD_PHP_82_INI_SCAN_DIR="$HOME/Library/Application Support/Herd/config/php/82/"
+export HERD_PHP_83_INI_SCAN_DIR="$HOME/Library/Application Support/Herd/config/php/83/"
+export HERD_PHP_84_INI_SCAN_DIR="$HOME/Library/Application Support/Herd/config/php/84/"
