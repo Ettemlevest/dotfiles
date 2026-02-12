@@ -94,28 +94,20 @@ alias nah="git reset --hard; git clean -df"
 alias gfa="git fetch --all --prune --jobs=10"
 alias gco="git checkout"
 alias gl="git pull"
-alias gp="git push"
-alias gpo="git push origin"
-alias gm="git merge"
 alias gsb="git status --short --branch"
 alias gwip='git add -A; git rm $(git ls-files --deleted) 2> /dev/null; git commit --no-verify --no-gpg-sign --message "--wip-- [skip ci]"'
 alias gunwip='git log --max-count=1 | grep -q -c "\--wip--" && git reset HEAD~1'
-alias gbdropobsolete="git branch --no-color -vv | grep ': gone]' | awk '{print \$1}' | xargs git branch -D"
-alias lazygit='gitui'
+alias gdropobsoletebranches="git branch --no-color -vv | grep ': gone]' | awk '{print \$1}' | xargs git branch -D"
 alias uncommit="git reset --soft HEAD~1"
 
 # ============================================
 # PHP / Laravel
 # ============================================
 alias art="php artisan"
-alias artisan="php artisan"
 alias mfs="php artisan migrate:fresh --seed"
 alias phpunit="vendor/bin/phpunit"
 alias testdox="vendor/bin/phpunit --testdox -v"
 alias ci="composer install"
-alias cu="composer update"
-alias cr="composer require"
-alias cda="composer dump-autoload -o"
 alias phpstan="./vendor/bin/phpstan"
 alias genbaseline="./vendor/bin/phpstan --generate-baseline"
 alias pest="./vendor/bin/pest"
