@@ -81,6 +81,10 @@ backup_if_exists "$HOME/.claude/CLAUDE.md"
 ln -sf "$DOTFILES_DIR/config/claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md"
 success "Linked Claude Code CLAUDE.md"
 
+backup_if_exists "$HOME/.claude/statusline.sh"
+ln -sf "$DOTFILES_DIR/config/claude/statusline.sh" "$HOME/.claude/statusline.sh"
+success "Linked Claude Code statusline.sh"
+
 # ============================================
 # Zsh Syntax Highlighting (OMZ custom plugin)
 # ============================================
