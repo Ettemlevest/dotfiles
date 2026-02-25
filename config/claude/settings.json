@@ -62,7 +62,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "osascript -e 'display notification \"Claude has finished thinking.\" with title \"Claude Code\" sound name \"Glass\"'"
+            "command": "bash ~/.claude/notify.sh 'Claude has finished thinking.' 'Glass'"
           }
         ]
       }
@@ -73,19 +73,20 @@
         "hooks": [
           {
             "type": "command",
-            "command": "osascript -e 'display notification \"Your input is needed.\" with title \"Claude Code\" sound name \"Submarine\"'"
+            "command": "bash ~/.claude/notify.sh 'Your input is needed.' 'Submarine'"
           }
         ]
       }
     ]
   },
-  "enabledPlugins": {
-    "laravel-simplifier@laravel": true,
-    "agent-browser@agent-browser": true
-  },
-  "alwaysThinkingEnabled": true,
   "statusLine": {
     "type": "command",
     "command": "bash ~/.claude/statusline.sh"
-  }
+  },
+  "enabledPlugins": {
+    "laravel-simplifier@laravel": true,
+    "agent-browser@agent-browser": true,
+    "laravel-boost@claude-plugins-official": true
+  },
+  "alwaysThinkingEnabled": true
 }
