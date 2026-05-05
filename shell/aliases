@@ -54,7 +54,7 @@ alias sgrep="grep -i -R -n -H -C 5 --exclude-dir={.git,.svn,node_modules,.Trash,
 alias matrix="cmatrix -abs"
 alias top-history="history 0 | awk '{print \$4}' | sort | uniq -c | sort -n -r | head"
 alias reload="reset; source ~/.zshrc"
-alias tldr="tldr --color=always --pager"
+alias tldr="command tldr --color=always --pager"
 
 # Flush DNS cache
 alias flushdns="sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder"
