@@ -67,7 +67,7 @@
           "type": "root"
         },
         {
-          "foreground": "#f1184c",
+          "foreground": "#ee7c00",
           "style": "plain",
           "template": "λ ",
           "type": "text"
