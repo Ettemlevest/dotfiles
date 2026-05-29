@@ -69,7 +69,7 @@
         {
           "foreground": "#f1184c",
           "style": "plain",
-          "template": "🦄 ",
+          "template": "λ ",
           "type": "text"
         }
       ],
