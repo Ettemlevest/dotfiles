@@ -1,25 +1,19 @@
 # ============================================
-# Oh-My-Zsh Configuration
-# ============================================
-export ZSH="$HOME/.oh-my-zsh"
-
-# Agnoster theme (requires Powerline/Nerd font)
-ZSH_THEME="agnoster"
-
-plugins=(
-    zsh-autosuggestions
-    zsh-syntax-highlighting
-)
-
-source "$ZSH/oh-my-zsh.sh"
-
-# ============================================
 # History Settings
 # ============================================
+HISTFILE="$HOME/.zsh_history"
+HISTSIZE=50000
+SAVEHIST=50000
 setopt HIST_FIND_NO_DUPS
 setopt HIST_IGNORE_ALL_DUPS
 setopt EXTENDED_HISTORY
 setopt INC_APPEND_HISTORY
+setopt SHARE_HISTORY
+
+# ============================================
+# Completion
+# ============================================
+autoload -Uz compinit && compinit
 
 # ============================================
 # Source Custom Configuration Files
@@ -65,6 +59,23 @@ if command -v fzf &> /dev/null; then
     brew_prefix="$(brew --prefix)"
     [[ -f "$brew_prefix/opt/fzf/shell/key-bindings.zsh" ]] && source "$brew_prefix/opt/fzf/shell/key-bindings.zsh"
     [[ -f "$brew_prefix/opt/fzf/shell/completion.zsh" ]] && source "$brew_prefix/opt/fzf/shell/completion.zsh"
+fi
+
+# ============================================
+# Zsh Plugins (Homebrew)
+# ============================================
+brew_prefix="${brew_prefix:-$(brew --prefix)}"
+[[ -f "$brew_prefix/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]] && \
+    source "$brew_prefix/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+# zsh-syntax-highlighting MUST be sourced last
+[[ -f "$brew_prefix/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ]] && \
+    source "$brew_prefix/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+
+# ============================================
+# Prompt: oh-my-posh
+# ============================================
+if command -v oh-my-posh &> /dev/null; then
+    eval "$(oh-my-posh init zsh --config "$HOME/.dotfiles/config/oh-my-posh/theme.omp.json")"
 fi
 
 # ============================================

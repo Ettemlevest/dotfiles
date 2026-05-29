@@ -16,11 +16,6 @@ export LANG="en_US.UTF-8"
 export LC_ALL="en_US.UTF-8"
 
 # ============================================
-# Agnoster Theme - Hide user@host
-# ============================================
-export DEFAULT_USER="imi"
-
-# ============================================
 # History Configuration
 # ============================================
 export HISTSIZE=50000

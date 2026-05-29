@@ -85,16 +85,21 @@ backup_if_exists "$HOME/.claude/statusline.sh"
 ln -sf "$DOTFILES_DIR/config/claude/statusline.sh" "$HOME/.claude/statusline.sh"
 success "Linked Claude Code statusline.sh"
 
+# Ghostty
+mkdir -p "$HOME/.config/ghostty"
+backup_if_exists "$HOME/.config/ghostty/config"
+ln -sf "$DOTFILES_DIR/config/ghostty/config" "$HOME/.config/ghostty/config"
+success "Linked Ghostty config"
+
 # ============================================
-# Zsh Syntax Highlighting (OMZ custom plugin)
+# oh-my-posh theme (seed if missing)
 # ============================================
-ZSH_CUSTOM="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}"
-if [[ ! -d "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting" ]]; then
-    log "Installing zsh-syntax-highlighting..."
-    git clone https://github.com/zsh-users/zsh-syntax-highlighting.git "$ZSH_CUSTOM/plugins/zsh-syntax-highlighting"
-    success "Installed zsh-syntax-highlighting"
-else
-    log "zsh-syntax-highlighting already installed"
+OMP_THEME_DIR="$DOTFILES_DIR/config/oh-my-posh"
+mkdir -p "$OMP_THEME_DIR"
+if [[ ! -f "$OMP_THEME_DIR/theme.omp.json" ]] && command -v oh-my-posh &>/dev/null; then
+    log "Seeding oh-my-posh theme from agnoster..."
+    cp "$(brew --prefix oh-my-posh)/themes/agnoster.omp.json" "$OMP_THEME_DIR/theme.omp.json"
+    success "Seeded oh-my-posh theme.omp.json"
 fi
 
 # ============================================
@@ -119,7 +124,8 @@ echo ""
 success "Installation complete!"
 echo ""
 log "What's new:"
-echo "  - Agnoster theme (requires Nerd Font in terminal)"
+echo "  - Ghostty terminal (config in ~/.dotfiles/config/ghostty/config)"
+echo "  - oh-my-posh prompt (theme in ~/.dotfiles/config/oh-my-posh/theme.omp.json)"
 echo "  - zoxide: Smart 'cd' - type 'z <partial-path>' to jump"
 echo "  - delta: Beautiful git diffs with syntax highlighting"
 echo "  - direnv: Per-directory environment variables"
@@ -136,7 +142,8 @@ echo "  fshow        - FZF git commit browser"
 echo "  h            - Fuzzy history search"
 echo ""
 log "Next steps:"
-echo "  1. Restart your terminal or run: source ~/.zshrc"
-echo "  2. Configure your terminal to use a Nerd Font"
-echo "     (e.g., Hack Nerd Font, already installed)"
+echo "  1. Open Ghostty (Cmd+Space → Ghostty)"
+echo "  2. Browse themes with: ghostty +list-themes"
+echo "  3. Swap oh-my-posh themes by editing config/oh-my-posh/theme.omp.json"
+echo "     or copying another from: \$(brew --prefix oh-my-posh)/themes/"
 echo ""
