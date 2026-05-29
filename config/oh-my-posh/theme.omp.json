@@ -35,14 +35,6 @@
           "type": "git"
         },
         {
-          "background": "#003543",
-          "foreground": "#fff",
-          "powerline_symbol": "\ue0b0",
-          "style": "powerline",
-          "template": "<#fff> \ue641 </>{{ .CurrentDate | date .Format }} ",
-          "type": "time"
-        },
-        {
           "background": "#83769c",
           "foreground": "#ffffff",
           "options": {
@@ -52,6 +44,20 @@
           "template": " \ueba2 {{ .FormattedMs }}\u2800",
           "trailing_diamond": "\ue0b4",
           "type": "executiontime"
+        }
+      ],
+      "type": "prompt"
+    },
+    {
+      "alignment": "right",
+      "segments": [
+        {
+          "background": "#003543",
+          "foreground": "#fff",
+          "leading_diamond": "\ue0b2",
+          "style": "diamond",
+          "template": "<#fff> \ue641 </>{{ .CurrentDate | date .Format }} ",
+          "type": "time"
         }
       ],
       "type": "prompt"
