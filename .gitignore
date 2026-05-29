@@ -2,3 +2,5 @@
 /.vscode
 /.claude
 /shell/secrets
+.DS_Store
+*.swp
