@@ -81,7 +81,8 @@ alias ....="cd ../../.."
 # ============================================
 # Homebrew
 # ============================================
-alias bu="brew update && brew outdated"
+alias bu="brew update && brew outdated --formula && brew outdated --cask"
+alias bmaintenance="brew update && brew upgrade && brew autoremove && brew cleanup && brew doctor"
 alias bup="brew upgrade"
 alias binfo="brew info"
 alias bsr="brew search"
