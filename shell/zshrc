@@ -78,17 +78,25 @@ if command -v oh-my-posh &> /dev/null; then
     eval "$(oh-my-posh init zsh --config "$HOME/.dotfiles/config/oh-my-posh/theme.omp.json")"
 fi
 
-# ============================================
-# Laravel Herd Configuration
-# ============================================
-export PATH="$HOME/Library/Application Support/Herd/bin/:$PATH"
+# bun
+export BUN_INSTALL="$HOME/Library/Application Support/reflex/bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
 
-export NVM_DIR="$HOME/Library/Application Support/Herd/config/nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+# >>> yerd PATH >>>
+case ":$PATH:" in
+  *":$HOME/Library/Application Support/io.yerd.Yerd/bin:"*) ;;
+  *) export PATH="$HOME/Library/Application Support/io.yerd.Yerd/bin:$PATH" ;;
+esac
+export PHPRC="$HOME/Library/Application Support/io.yerd.Yerd/php-cli.ini"
+# <<< yerd PATH <<<
 
-[[ -f "/Applications/Herd.app/Contents/Resources/config/shell/zshrc.zsh" ]] && \
-    builtin source "/Applications/Herd.app/Contents/Resources/config/shell/zshrc.zsh"
+# >>> yerd mysql client >>>
+for yerd_mysql_bin in "$HOME/Library/Application Support/io.yerd.Yerd/services/mysql/"*/bin(N/); do
+  export PATH="$yerd_mysql_bin:$PATH"
+done
+unset yerd_mysql_bin
+# <<< yerd mysql client <<<
 
-export HERD_PHP_82_INI_SCAN_DIR="$HOME/Library/Application Support/Herd/config/php/82/"
-export HERD_PHP_83_INI_SCAN_DIR="$HOME/Library/Application Support/Herd/config/php/83/"
-export HERD_PHP_84_INI_SCAN_DIR="$HOME/Library/Application Support/Herd/config/php/84/"
+# >>> fnm (per-project Node via .nvmrc; default is "system", i.e. Yerd's Node) >>>
+eval "$(fnm env --use-on-cd --version-file-strategy=recursive)"
+# <<< fnm <<<
