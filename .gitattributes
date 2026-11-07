@@ -1,0 +1,3 @@
+# Strip machine/account-specific keys Claude Code writes at runtime.
+# Filter definition lives in .git/config: filter.claude-settings.*
+config/claude/settings.json filter=claude-settings
