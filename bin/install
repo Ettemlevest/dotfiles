@@ -71,17 +71,32 @@ mkdir -p "$HOME/.local/bin"
 ln -sf "$DOTFILES_DIR/shell/backup" "$HOME/.local/bin/backup"
 success "Linked backup script"
 
-# Claude Code
-mkdir -p "$HOME/.claude"
-backup_if_exists "$HOME/.claude/settings.json"
-ln -sf "$DOTFILES_DIR/config/claude/settings.json" "$HOME/.claude/settings.json"
-success "Linked Claude Code settings"
+ln -sf "$DOTFILES_DIR/shell/claude-settings-sync" "$HOME/.local/bin/claude-settings-sync"
+success "Linked claude-settings-sync script"
 
-# Strip machine-specific keys from settings.json on git add (see .gitattributes)
-git -C "$DOTFILES_DIR" config filter.claude-settings.clean "jq --indent 2 'del(.remote, .autoMode)'"
-git -C "$DOTFILES_DIR" config filter.claude-settings.smudge cat
-git -C "$DOTFILES_DIR" config filter.claude-settings.required true
-success "Configured claude-settings git filter"
+# Claude Code
+# settings.json is merged, not symlinked: Claude Code writes machine-specific
+# keys into it at runtime, which must stay out of the repo. Copy changes back
+# into the repo with `claude-settings-sync`.
+mkdir -p "$HOME/.claude"
+claude_settings="$HOME/.claude/settings.json"
+repo_claude_settings="$DOTFILES_DIR/config/claude/settings.json"
+if [[ -L "$claude_settings" ]]; then
+    # Migrate from the old symlink setup: replace the link with a real copy
+    cp "$claude_settings" "$claude_settings.tmp"
+    rm "$claude_settings"
+    mv "$claude_settings.tmp" "$claude_settings"
+fi
+if [[ -f "$claude_settings" ]]; then
+    cp "$claude_settings" "$claude_settings.backup"
+    # Repo values win for shared keys; local-only keys are kept
+    merged="$(jq --indent 2 -s '.[0] * .[1]' "$claude_settings" "$repo_claude_settings")"
+    printf '%s\n' "$merged" > "$claude_settings"
+    success "Merged Claude Code settings (previous version in settings.json.backup)"
+else
+    cp "$repo_claude_settings" "$claude_settings"
+    success "Copied Claude Code settings"
+fi
 
 backup_if_exists "$HOME/.claude/CLAUDE.md"
 ln -sf "$DOTFILES_DIR/config/claude/CLAUDE.md" "$HOME/.claude/CLAUDE.md"

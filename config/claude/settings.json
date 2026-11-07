@@ -53,7 +53,7 @@
       "mcp__laravel-boost__*",
       "mcp__chrome-devtools__*"
     ],
-    "defaultMode": "acceptEdits"
+    "defaultMode": "auto"
   },
   "hooks": {
     "Stop": [
@@ -88,5 +88,13 @@
     "agent-browser@agent-browser": true,
     "laravel-boost@claude-plugins-official": true
   },
-  "alwaysThinkingEnabled": true
+  "alwaysThinkingEnabled": true,
+  "effortLevel": "xhigh",
+  "tui": "fullscreen",
+  "agentPushNotifEnabled": true,
+  "modelSettings": {
+    "claude-fable-5-1": {
+      "effortLevel": "high"
+    }
+  }
 }

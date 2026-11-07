@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# Copy the live Claude Code settings into the dotfiles repo, without the
+# machine/account-specific keys Claude Code writes at runtime.
+# The reverse direction (repo -> ~/.claude) is done by bin/install.
+set -euo pipefail
+
+# Keys that stay local only. Add new ones here.
+LOCAL_ONLY_KEYS='del(.remote, .autoMode)'
+
+src="$HOME/.claude/settings.json"
+dest="$HOME/.dotfiles/config/claude/settings.json"
+
+if [[ -L "$src" ]]; then
+    echo "error: $src is still a symlink; run bin/install first" >&2
+    exit 1
+fi
+
+stripped="$(jq --indent 2 "$LOCAL_ONLY_KEYS" "$src")"
+printf '%s\n' "$stripped" > "$dest"
+
+git -C "$HOME/.dotfiles" --no-pager diff --stat -- config/claude/settings.json
