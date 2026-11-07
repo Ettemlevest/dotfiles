@@ -2,7 +2,6 @@
 # CLI Tools
 # ===========================================
 brew "bat"                    # Cat replacement with syntax highlighting
-brew "bottom"                 # System monitor (htop replacement)
 brew "direnv"                 # Directory-based environment variables
 brew "eza"                    # Modern ls replacement
 brew "fd"                     # Fast find alternative
@@ -11,16 +10,12 @@ brew "git-delta"              # Beautiful git diffs with syntax highlighting
 brew "gitui"                  # Git TUI
 brew "glow"                   # Markdown renderer
 brew "htop"                   # Interactive process viewer
-brew "httpie"                 # HTTP client
 brew "jq"                     # JSON processor
 brew "mc"                     # Midnight Commander file manager
-brew "ncdu"                   # NCurses disk usage
-brew "nnn"                    # File manager
 brew "ripgrep"                # Fast grep replacement
 brew "tealdeer"               # tldr pages
 brew "tmux"                   # Terminal multiplexer
 brew "tmux-mem-cpu-load"      # CPU/memory stats for tmux status bar
-brew "vifm"                   # Vi file manager
 brew "yq"                     # YAML processor
 brew "zoxide"                 # Smarter cd command (learns your habits)
 brew "zsh-autosuggestions"    # Fish-like autosuggestions
@@ -46,7 +41,6 @@ cask "rectangle"              # Window manager
 cask "iterm2"                 # Terminal emulator
 cask "ghostty"                # GPU-accelerated terminal
 cask "hiddenbar"              # Menu bar manager
-cask "monitorcontrol"         # External display brightness
 cask "obsidian"               # Note-taking
 cask "bruno"                  # API client
 cask "postman"                # API testing

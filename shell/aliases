@@ -20,12 +20,6 @@ if command -v bat &> /dev/null; then
     alias catp="bat"  # bat with pager
 fi
 
-# bottom replaces htop/top
-if command -v btm &> /dev/null; then
-    alias top="btm"
-    alias htop="btm"
-fi
-
 # ripgrep enhances grep (keep sgrep as custom search)
 if command -v rg &> /dev/null; then
     alias rgrep="rg"
