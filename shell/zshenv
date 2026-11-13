@@ -1,0 +1,11 @@
+# Read by every zsh (interactive or not), so GUI apps such as Neovide
+# launched from Raycast/Dock also get these tools.
+# Keep this file small: only PATH-like environment, no output, no slow commands.
+
+# Yerd: node, npm, php, composer
+case ":$PATH:" in
+  *":$HOME/Library/Application Support/io.yerd.Yerd/bin:"*) ;;
+  *) export PATH="$HOME/Library/Application Support/io.yerd.Yerd/bin:$PATH" ;;
+esac
+export PHPRC="$HOME/Library/Application Support/io.yerd.Yerd/php-cli.ini"
+

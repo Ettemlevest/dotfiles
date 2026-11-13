@@ -61,6 +61,10 @@ backup_if_exists "$HOME/.zshrc"
 ln -sf "$DOTFILES_DIR/shell/zshrc" "$HOME/.zshrc"
 success "Linked .zshrc"
 
+backup_if_exists "$HOME/.zshenv"
+ln -sf "$DOTFILES_DIR/shell/zshenv" "$HOME/.zshenv"
+success "Linked .zshenv"
+
 # Git config
 backup_if_exists "$HOME/.gitconfig"
 ln -sf "$DOTFILES_DIR/git/.gitconfig" "$HOME/.gitconfig"
