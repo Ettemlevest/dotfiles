@@ -177,6 +177,30 @@ do
   -- instead raise a dialog asking if you wish to save the current file(s)
   -- See `:help 'confirm'`
   vim.o.confirm = true
+
+  -- [[ Neovide (GUI) settings ]]
+  -- Only runs inside Neovide; terminal nvim skips this block.
+  -- See https://neovide.dev/configuration.html
+  if vim.g.neovide then
+    -- Neovide renders text itself, so it needs its own font setting
+    vim.o.guifont = 'Hack Nerd Font:h13'
+
+    -- Left Option = Alt/Meta (for <M-...> mappings like ⌥Enter in step 6),
+    -- right Option still types special characters
+    vim.g.neovide_input_macos_option_key_is_meta = 'only_left'
+
+    -- macOS-style Cmd shortcuts
+    vim.keymap.set({ 'n', 'i' }, '<D-s>', '<cmd>w<CR>', { desc = 'Save' })
+    vim.keymap.set('v', '<D-c>', '"+y', { desc = 'Copy' })
+    vim.keymap.set({ 'n', 'v' }, '<D-v>', '"+P', { desc = 'Paste' })
+    vim.keymap.set('c', '<D-v>', '<C-R>+', { desc = 'Paste' })
+    vim.keymap.set('i', '<D-v>', '<C-R><C-O>+', { desc = 'Paste' })
+
+    -- No cursor animation: jump instantly to the new position
+    vim.g.neovide_cursor_animation_length = 0
+    vim.g.neovide_cursor_short_animation_length = 0
+    vim.g.neovide_cursor_trail_size = 0
+  end
 end
 
 -- ============================================================
