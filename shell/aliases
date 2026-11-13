@@ -115,7 +115,6 @@ alias pest="./vendor/bin/pest"
 # ============================================
 # Applications
 # ============================================
-alias code='open -a "/Applications/Visual Studio Code.app" "`pwd`"'
 alias storm='open -a "PhpStorm" "`pwd`"'
 
 # ============================================
