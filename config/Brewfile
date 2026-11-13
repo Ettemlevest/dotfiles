@@ -21,6 +21,7 @@ brew "zoxide"                 # Smarter cd command (learns your habits)
 brew "zsh-autosuggestions"    # Fish-like autosuggestions
 brew "zsh-syntax-highlighting"  # Fish-like command coloring
 brew "oh-my-posh"             # Cross-shell prompt engine
+brew "tree-sitter-cli"        # Builds Treesitter parsers for Neovim
 
 # ===========================================
 # Development Tools
@@ -40,6 +41,8 @@ cask "alt-tab"                # Windows-style alt-tab
 cask "rectangle"              # Window manager
 cask "iterm2"                 # Terminal emulator
 cask "ghostty"                # GPU-accelerated terminal
+brew "neovim"                 # Editor
+cask "neovide"                # Neovim GUI
 cask "hiddenbar"              # Menu bar manager
 cask "obsidian"               # Note-taking
 cask "bruno"                  # API client
