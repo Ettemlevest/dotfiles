@@ -761,18 +761,48 @@ do
   -- Enable the following language servers
   --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
   --  See `:help lsp-config` for information about keys and how to configure
+
+  -- JSON/YAML schemas (package.json, composer.json, GitHub Actions, docker-compose, ...)
+  vim.pack.add { gh 'b0o/SchemaStore.nvim' }
+
   ---@type table<string, vim.lsp.Config>
   local servers = {
-    -- clangd = {},
-    -- gopls = {},
-    -- pyright = {},
-    -- tsc = {},
-    --
-    -- Some languages (like rust) have entire language plugins that can be useful:
-    --    https://github.com/mrcjkb/rustaceanvim
-    --
-    -- But for many setups, the LSP (`rust_analyzer`) will work just fine
-    -- rust_analyzer = {},
+    -- PHP. Licence key is read from ~/intelephense/licence.txt
+    intelephense = {},
+
+    -- JavaScript / TypeScript / React (JSX/TSX)
+    ts_ls = {},
+
+    -- HTML / CSS / Tailwind (tailwindcss also works in Blade and JSX)
+    html = {},
+    cssls = {},
+    tailwindcss = {},
+
+    -- JSON / YAML with schema validation
+    jsonls = {
+      settings = {
+        json = {
+          schemas = require('schemastore').json.schemas(),
+          validate = { enable = true },
+        },
+      },
+    },
+    yamlls = {
+      settings = {
+        yaml = {
+          schemaStore = { enable = false, url = '' }, -- use SchemaStore.nvim instead
+          schemas = require('schemastore').yaml.schemas(),
+        },
+      },
+    },
+
+    -- Python: pyright for types/navigation, ruff for linting
+    pyright = {},
+    ruff = {},
+
+    -- Shell scripts (bash/sh). Uses shellcheck for warnings.
+    bashls = {},
+
 
     stylua = {}, -- Used to format Lua code
 
@@ -833,7 +863,11 @@ do
   -- You can press `g?` for help in this menu.
   local ensure_installed = vim.tbl_keys(servers or {})
   vim.list_extend(ensure_installed, {
-    -- You can add other tools here that you want Mason to install
+    'pint', -- PHP (a project's own vendor/bin/pint is used first)
+    'blade-formatter', -- Blade templates
+    'prettierd', -- JS/TS/JSON/YAML/HTML/CSS (a project's own prettier is used first)
+    'shfmt', -- shell formatting
+    'shellcheck', -- shell linting, used by bashls
   })
 
   require('mason-tool-installer').setup { ensure_installed = ensure_installed }
@@ -851,16 +885,18 @@ end
 do
   -- [[ Formatting ]]
   vim.pack.add { gh 'stevearc/conform.nvim' }
+  local prettier = { 'prettierd', 'prettier', stop_after_first = true }
   require('conform').setup {
     notify_on_error = false,
     format_on_save = function(bufnr)
-      -- You can specify filetypes to autoformat on save here:
       local enabled_filetypes = {
-        -- lua = true,
-        -- python = true,
+        php = true, blade = true,
+        javascript = true, javascriptreact = true, typescript = true, typescriptreact = true,
+        json = true, jsonc = true, yaml = true, html = true, css = true,
+        python = true, sh = true, bash = true, lua = true,
       }
       if enabled_filetypes[vim.bo[bufnr].filetype] then
-        return { timeout_ms = 500 }
+        return { timeout_ms = 2000 } -- Pint needs more than the default 500ms
       else
         return nil
       end
@@ -870,12 +906,21 @@ do
     },
     -- You can also specify external formatters in here.
     formatters_by_ft = {
-      -- rust = { 'rustfmt' },
-      -- Conform can also run multiple formatters sequentially
-      -- python = { "isort", "black" },
-      --
-      -- You can use 'stop_after_first' to run the first available formatter from the list
-      -- javascript = { "prettierd", "prettier", stop_after_first = true },
+      php = { 'pint' },
+      blade = { 'blade-formatter' },
+      javascript = prettier,
+      javascriptreact = prettier,
+      typescript = prettier,
+      typescriptreact = prettier,
+      json = prettier,
+      jsonc = prettier,
+      yaml = prettier,
+      html = prettier,
+      css = prettier,
+      python = { 'ruff_format' },
+      sh = { 'shfmt' },
+      bash = { 'shfmt' },
+      lua = { 'stylua' },
     },
   }
 
@@ -978,7 +1023,11 @@ do
   vim.pack.add { { src = gh 'nvim-treesitter/nvim-treesitter', version = 'main' } }
 
   -- Ensure basic parsers are installed
-  local parsers = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' }
+  local parsers = {
+    'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc',
+    'php', 'phpdoc', 'blade', 'javascript', 'typescript', 'tsx', 'jsdoc',
+    'json', 'yaml', 'css', 'python', 'regex',
+  }
   require('nvim-treesitter').install(parsers)
 
   ---@param buf integer
