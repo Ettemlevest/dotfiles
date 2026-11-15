@@ -11,6 +11,7 @@ brew "gitui"                  # Git TUI
 brew "glow"                   # Markdown renderer
 brew "htop"                   # Interactive process viewer
 brew "jq"                     # JSON processor
+brew "lazygit"                # Git TUI (Lazyvim <leader>gg)
 brew "mc"                     # Midnight Commander file manager
 brew "ripgrep"                # Fast grep replacement
 brew "tealdeer"               # tldr pages
