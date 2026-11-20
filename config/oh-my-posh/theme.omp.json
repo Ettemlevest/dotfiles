@@ -84,5 +84,9 @@
   ],
   "console_title_template": "{{.UserName}}@{{.HostName}} in {{ .PWD }}",
   "final_space": true,
-  "version": 4
+  "version": 4,
+  "upgrade": {
+    "auto": false,
+    "notice": true
+  }
 }
