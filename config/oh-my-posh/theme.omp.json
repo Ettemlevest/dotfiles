@@ -7,12 +7,11 @@
         {
           "background": "#0087D8",
           "foreground": "#003544",
-          "powerline_symbol": "\ue0b0",
           "options": {
             "folder_separator_icon": "/",
             "style": "full"
           },
-          "style": "powerline",
+          "style": "diamond",
           "template": " \ue5ff {{ .Path }} ",
           "type": "path"
         },
