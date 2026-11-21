@@ -116,6 +116,15 @@ backup_if_exists "$HOME/.config/ghostty/config"
 ln -sf "$DOTFILES_DIR/config/ghostty/config" "$HOME/.config/ghostty/config"
 success "Linked Ghostty config"
 
+# Neovim (LazyVim)
+mkdir -p "$HOME/.config"
+if [[ -d "$HOME/.config/nvim" && ! -L "$HOME/.config/nvim" ]]; then
+    warn "Backing up existing ~/.config/nvim to ~/.config/nvim.backup"
+    mv "$HOME/.config/nvim" "$HOME/.config/nvim.backup"
+fi
+ln -sfn "$DOTFILES_DIR/config/nvim" "$HOME/.config/nvim"
+success "Linked Neovim config"
+
 # ============================================
 # oh-my-posh theme (seed if missing)
 # ============================================

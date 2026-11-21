@@ -1,21 +1,30 @@
 # Font
 font-family = Hack Nerd Font
-font-size = 13
+font-size = 16
+adjust-cell-height = 20%
 
 # Theme (run `ghostty +list-themes` to browse)
-theme = Monokai Soda
+theme = TokyoNight Moon
 
-# Shell integration
+# Background
+background-opacity = 0.8
+background-blur = 25
+
+# Shell integration (cursor and title are enabled by default)
 shell-integration = zsh
-shell-integration-features = cursor,sudo,title
-
-# Cursor
-cursor-style = block
+shell-integration-features = sudo
 
 # Window
-window-padding-x = 8
-window-padding-y = 8
-macos-titlebar-style = transparent
+window-padding-x = 0
+window-padding-y = 0
+window-padding-color = extend
+window-padding-balance = true
+window-colorspace = display-p3
+window-save-state = always
+
+# Keyboard
+# Left Option acts as Alt/Meta; right Option stays AltGr for the Hungarian layout
+macos-option-as-alt = left
 
 # Clipboard
 copy-on-select = clipboard

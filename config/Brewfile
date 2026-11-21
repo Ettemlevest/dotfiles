@@ -11,6 +11,7 @@ brew "gitui"                  # Git TUI
 brew "glow"                   # Markdown renderer
 brew "htop"                   # Interactive process viewer
 brew "jq"                     # JSON processor
+brew "lazygit"                # Git TUI (Lazyvim <leader>gg)
 brew "mc"                     # Midnight Commander file manager
 brew "ripgrep"                # Fast grep replacement
 brew "tealdeer"               # tldr pages
@@ -39,23 +40,11 @@ brew "cmatrix"                # Matrix rain effect
 # ===========================================
 cask "alt-tab"                # Windows-style alt-tab
 cask "rectangle"              # Window manager
-cask "iterm2"                 # Terminal emulator
 cask "ghostty"                # GPU-accelerated terminal
 brew "neovim"                 # Editor
-cask "neovide"                # Neovim GUI
-cask "hiddenbar"              # Menu bar manager
+cask "neovide-app"            # Neovim GUI
 cask "obsidian"               # Note-taking
 cask "bruno"                  # API client
-cask "postman"                # API testing
-
-# ===========================================
-# QuickLook Plugins
-# ===========================================
-cask "qlcolorcode"            # Syntax highlighting in QuickLook
-cask "qlstephen"              # Preview plain text files without extension
-cask "qlmarkdown"             # Preview Markdown files
-cask "quicklook-csv"          # Preview CSV files
-cask "suspicious-package"     # Preview .pkg installers
 
 # ===========================================
 # Fonts
