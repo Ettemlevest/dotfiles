@@ -28,7 +28,8 @@
           "powerline_symbol": "\ue0b0",
           "options": {
             "fetch_status": true,
-            "fetch_upstream_icon": true
+            "fetch_upstream_icon": true,
+            "branch_template": "{{ truncE (max 12 (div (int (default \"120\" .Env.POSH_COLUMNS)) 5)) .Branch }}"
           },
           "style": "powerline",
           "template": " {{ if .UpstreamIcon }}{{ .UpstreamIcon }} {{ end }}{{ .HEAD }}{{if .BranchStatus }} {{ .BranchStatus }}{{ end }}{{ if .Working.Changed }} \uf044 {{ .Working.String }}{{ end }}{{ if and (.Working.Changed) (.Staging.Changed) }} |{{ end }}{{ if .Staging.Changed }} \uf046 {{ .Staging.String }}{{ end }}{{ if gt .StashCount 0 }} \ueb4b {{ .StashCount }}{{ end }} ",
