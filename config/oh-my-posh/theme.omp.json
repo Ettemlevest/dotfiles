@@ -9,7 +9,8 @@
           "foreground": "#003544",
           "options": {
             "folder_separator_icon": "/",
-            "style": "full"
+            "style": "powerlevel",
+            "max_width": "{{ div (mul (int (default \"120\" .Env.POSH_COLUMNS)) 35) 100 }}"
           },
           "style": "diamond",
           "template": " \ue5ff {{ .Path }} ",
