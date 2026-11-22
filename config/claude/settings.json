@@ -55,25 +55,15 @@
     ],
     "defaultMode": "auto"
   },
+  "model": "opus",
   "hooks": {
-    "Stop": [
+    "SessionStart": [
       {
-        "matcher": "*",
         "hooks": [
           {
             "type": "command",
-            "command": "bash ~/.claude/notify.sh 'Claude has finished thinking.' 'Glass'"
-          }
-        ]
-      }
-    ],
-    "Notification": [
-      {
-        "matcher": "permission_prompt|idle_prompt|elicitation_dialog",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash ~/.claude/notify.sh 'Your input is needed.' 'Submarine'"
+            "command": "/bin/sh -c 'rex __internal session-start --agent claude --feature-session-naming=false 2>/dev/null || true'",
+            "timeout": 5
           }
         ]
       }
@@ -86,15 +76,16 @@
   "enabledPlugins": {
     "laravel-simplifier@laravel": true,
     "agent-browser@agent-browser": true,
-    "laravel-boost@claude-plugins-official": true
+    "laravel-boost@claude-plugins-official": true,
+    "mattpocock-skills@claude-plugins-official": true
   },
   "alwaysThinkingEnabled": true,
   "effortLevel": "xhigh",
-  "tui": "fullscreen",
-  "agentPushNotifEnabled": true,
   "modelSettings": {
     "claude-fable-5-1": {
       "effortLevel": "high"
     }
-  }
+  },
+  "tui": "fullscreen",
+  "agentPushNotifEnabled": true
 }
