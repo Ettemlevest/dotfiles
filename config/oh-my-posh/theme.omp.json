@@ -9,11 +9,12 @@
           "foreground": "#003544",
           "options": {
             "folder_separator_icon": "/",
-            "style": "powerlevel",
+            "style": "agnoster_short",
+            "windows_registry_icon": "",
             "max_width": "{{ div (mul (int (default \"120\" .Env.POSH_COLUMNS)) 35) 100 }}"
           },
           "style": "diamond",
-          "template": " \ue5ff {{ .Path }} ",
+          "template": " {{ .Path }} ",
           "type": "path"
         },
         {
@@ -27,8 +28,6 @@
           "foreground": "#193549",
           "powerline_symbol": "\ue0b0",
           "options": {
-            "fetch_status": true,
-            "fetch_upstream_icon": true,
             "branch_template": "{{ truncE (max 12 (div (int (default \"120\" .Env.POSH_COLUMNS)) 5)) .Branch }}"
           },
           "style": "powerline",
@@ -75,10 +74,11 @@
           "type": "root"
         },
         {
-          "foreground": "#ee7c00",
+          "type": "text",
+          "foreground": "#d2ff5e",
           "style": "plain",
-          "template": "λ ",
-          "type": "text"
+          "foreground_templates": ["{{ if gt .Code 0 }}#f26d50{{ end }}"],
+          "template": "❱"
         }
       ],
       "type": "prompt"
