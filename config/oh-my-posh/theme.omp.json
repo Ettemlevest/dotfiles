@@ -9,9 +9,7 @@
           "foreground": "#003544",
           "options": {
             "folder_separator_icon": "/",
-            "style": "agnoster_short",
-            "windows_registry_icon": "",
-            "max_width": "{{ div (mul (int (default \"120\" .Env.POSH_COLUMNS)) 35) 100 }}"
+            "style": "agnoster_short"
           },
           "style": "diamond",
           "template": " {{ .Path }} ",
