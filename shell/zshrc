@@ -76,6 +76,13 @@ brew_prefix="${brew_prefix:-$(brew --prefix)}"
 # ============================================
 if command -v oh-my-posh &> /dev/null; then
     eval "$(oh-my-posh init zsh --config "$HOME/.dotfiles/config/oh-my-posh/theme.omp.json")"
+
+    # Expose the terminal width to the theme as .Env.POSH_COLUMNS.
+    # Must be defined after init, which declares an empty set_poshcontext.
+    # COLUMNS itself stays unexported: ncurses apps would read a stale width.
+    function set_poshcontext() {
+        export POSH_COLUMNS=$COLUMNS
+    }
 fi
 
 # bun
